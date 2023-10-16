@@ -38,7 +38,7 @@ O loop principal do programa é executado continuamente após o `setup()`. Aqui 
 
  - Se `start` for **true**, o jogo está em andamento. O código dentro deste bloco lida com o jogo em execução:
 
- - - São chamadas diversas funções para desenhar elementos do jogo, como o céu (`drawSky`), o "pad" controlado pelos botões (`drawPad`), os objetos que caem (`drawFallenItens`), e informações de vida e pontos (`drawLifeAndPoints`).
+   - São chamadas diversas funções para desenhar elementos do jogo, como o céu (`drawSky`), o "pad" controlado pelos botões (`drawPad`), os objetos que caem (`drawFallenItens`), e informações de vida e pontos (`drawLifeAndPoints`).
 
    - Há uma verificação de `intervalPosPause` para pausar o jogo por 2.5 segundos após ser despausado.
 
