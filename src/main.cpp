@@ -1,8 +1,4 @@
-//Incluindo Bibliotecas
-#include <Arduino.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_PCD8544.h>
-#include "PushButton.hpp"
+//Incluindo biblioteca principal do jogo
 #include "func.h"
 
 //Mapeando Hardware:
