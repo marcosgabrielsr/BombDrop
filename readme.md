@@ -11,7 +11,7 @@ Bombas e âncoras são geradas de formas aleatórias e em posições aleatórias
 
 <div align="center">
   <img src="https://cdn.discordapp.com/attachments/1153711382336909332/1163666420677234819/IMG-20230909-WA0074.jpg?ex=654067ce&is=652df2ce&hm=534c77987993fd8685b42c0ba37b979d68e9cdb51efe439247b89c3f099c4f49&">
-  <p>*imagem meramente ilustrativa sobre como o jogo funciona.*</p>
+  <p><i>imagem meramente ilustrativa sobre como o jogo funciona.<i></p>
 </div>
 
 **OBS**: A IDE utilizada para criação deste projeto é o PlatformIO, mas para trabalhar com o código pode ser utilizado também a Arduino IDE. Além disso, os sprites de jogo podem ser visualizados na pasta *imagens*.
