@@ -7,7 +7,7 @@ Mesmo sendo um projeto simples, acredito que seja interessante para estudo e apr
 
 Em resumo, neste jogo você controla uma plataforma que se move apenas na direção **x**, seu dever é evitar que as bombas passem da plataforma. Caso a bomba passe da linha da plataforma, você perde um ponto de vida, se o total de pontos de vida forem zero, fim de jogo. Caso caia uma âncora ao invés de uma bomba, deve evitá-la, pois caso você pegue a âncora com a plataforma perderá um ponto de vida.
 
-Bombas e âncoras são geradas de formas aleatórias e em posições aleatórias. Sempre que elas passão da linha da plataforma, são geradas novamente em outras posições.
+Bombas e âncoras são geradas de forma pseudo-aleatórias em posições pseudo-aleatórias. Sempre que elas passão do campo do jogo ou são pegas pelo pad, são geradas novamente em outras posições.
 
 <div align="center">
   <img src="https://cdn.discordapp.com/attachments/1153711382336909332/1163666420677234819/IMG-20230909-WA0074.jpg?ex=654067ce&is=652df2ce&hm=534c77987993fd8685b42c0ba37b979d68e9cdb51efe439247b89c3f099c4f49&">
@@ -49,7 +49,7 @@ O loop principal do programa é executado continuamente após o `setup()`. Aqui 
 
    - A função `buttonX.clickBtn()` é usada para verificar se o botão X foi clicado e, se for, a função `pause()` é chamada para pausar o jogo.
 
-- Se a vida for igual ou inferior a 0, o jogo terminou:
+- Se a vida for igual a 0, o jogo terminou:
 
    - O recorde é atualizado se os pontos atuais forem maiores que o recorde anterior.
 
@@ -91,8 +91,12 @@ Abaixo estão as principais funções reponsáveis pelo funcionamento do jogo.
 
 6. Função `drawInitScreen`:
  - Desenha a tela inicial do jogo no display, incluindo o título, um retângulo e a pontuação máxima (record).
- - A mensagem "(X) to start!" pisca intermitentemente para indicar que o jogador deve pressionar um botão para iniciar o jogo.
+ - A mensagem "(X) to start!" pisca intermitentemente para indicar que o jogador deve pressionar o **ButtonX** para iniciar o jogo.
  - Quando um botão é clicado, a variável start é definida como verdadeira, indicando o início do jogo.
+
+7. Função `genAndRestartItens`:
+- Gera um novo item, resetando as componentes x e y, onde y volta a ser 10 e x um valor pseudo-aleatório.
+- Utiliza ponteiros como parâmetros, assim os dados são alterados direto na memória.
 
 ## Referências
 Caso fique interessado em entender mais sobre a classe de pushbuttons acesse o link https://github.com/marcosgabrielsr/ClassePushButton.

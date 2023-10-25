@@ -135,14 +135,14 @@ void genAndRestarItens(int8_t *x, int8_t *y, bool *isBomb){
         *isBomb = false;
 
     *x = random(0, 43);              //setamos uma nova posição x para o item que vai cair
-    *y = 0;                          //zera-se o eixo y
+    *y = 10;                          //zera-se o eixo y
 }
 
 //Função que imprime as bombas que caem sempre em uma posição diferente da última
 //Além disso, essa função já faz o tratamento de pontos e perda de vida
 void drawFallenItens(Adafruit_PCD8544 &display, uint8_t &life,uint16_t &points, uint8_t padX, float &interval){
     //coorenadas da bomba
-    static int8_t x = random(0, 43), y = 0;
+    static int8_t x = random(0, 43), y = 10;
     static bool isBomb = true;
 
     //Variáveis para controle e atualização do tempo de queda da bomba
