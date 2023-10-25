@@ -123,6 +123,21 @@ void drawPad(Adafruit_PCD8544 &display, PushButton &buttonL, PushButton &buttonR
     
 }
 
+//Função que gera os novos itens necessários e reseta a posição y para 0 e gera uma nova posição x
+/*OBS: NOTE QUE ESTÃO SENDO UTILIZADOS PONTEIROS*/
+void genAndRestarItens(int8_t *x, int8_t *y, bool *isBomb){
+    //Para deicidir o item que irá cair, será pego um item aleatório, e se ele for par ou divisel por 3 será uma bomba
+    //caso contrário será uma âncora
+    int8_t a = random(0, 100);
+    if(a % 2 == 0 || a % 3 == 0)
+        *isBomb = true;
+    else
+        *isBomb = false;
+
+    *x = random(0, 43);              //setamos uma nova posição x para o item que vai cair
+    *y = 0;                          //zera-se o eixo y
+}
+
 //Função que imprime as bombas que caem sempre em uma posição diferente da última
 //Além disso, essa função já faz o tratamento de pontos e perda de vida
 void drawFallenItens(Adafruit_PCD8544 &display, uint8_t &life,uint16_t &points, uint8_t padX, float &interval){
@@ -137,31 +152,29 @@ void drawFallenItens(Adafruit_PCD8544 &display, uint8_t &life,uint16_t &points, 
     static unsigned long time = 0;
 
     //verifica quando a bomba chega na linha final
-    if(y >= 62){
+    if(y >= 61 && y <= 63){
         //Verificamos se uma das extremidades da bomba toca em pelo menus um pixel do pad ou se elas se encontram no range do pad
         if((x >= padX && x <= (padX + 10)) || ((x + 6) >= padX && (x + 6) <= (padX + 10))){ //Se sim....
             if(isBomb)                         //Se for uma bomba...   
                 points += 1;                   //Incrementamos os pontos
-            else
-                life -= 1;
-        }                                   
-        else
-            if(isBomb)                            //caso contrário...
-                life -= 1;                  //decrementamos a vida do player
-        
-        interval -= dValues[random(0, 4)]; //diminui-se o tempo de queda da bomba de forma aleatória
-        
-        //Para deicidir o item que irá cair, será pego um item aleatório, e se ele for par ou divisel por 3 será uma bomba
-        //caso contrário será uma âncora
-        int8_t a = random(0, 100);
-        if(a % 2 == 0 || a % 3 == 0)
-            isBomb = true;
-        else
-            isBomb = false;
+            else                               //Caso seja uma âncora...
+                life -= 1;                     //É decrementado a vida do player
+            
+            //Resentando as coordenadas e gerando novo item
+            genAndRestarItens(&x, &y, &isBomb);
 
-        x = random(0, 43);              //setamos uma nova posição x para o item que vai cair
-        y = 0;                          //zera-se o eixo y
-    }
+            interval -= dValues[random(0, 4)]; //diminui-se o tempo de queda da bomba de forma aleatória
+        }                                   
+    } else if(y >= 68){
+            //Quando chega ao fim do campo, verifica fica se é uma bomba...
+            if(isBomb)                            //caso seja...
+                life -= 1;                  //decrementamos a vida do player
+
+            interval -= dValues[random(0, 4)]; //diminui-se o tempo de queda da bomba de forma aleatória
+
+            //Por fim, gera um novo item 
+            genAndRestarItens(&x, &y, &isBomb);
+        }
 
     //Desenha a bomba ou a ancora na tela, se isBomb é verdadeiro desenha bomba, caso contrário desenha ancora
     if(isBomb)
