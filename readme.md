@@ -1,4 +1,4 @@
-**Autor**: Marcos Gabriel
+**Autor**: Marcos Gabriel <br>
 **Data da última atualização**: 16/10/2023 
 
 ## Descrição
