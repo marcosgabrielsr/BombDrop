@@ -25,7 +25,7 @@ Bombas e âncoras são geradas de forma pseudo-aleatórias em posições pseudo-
 
 3. Cria objetos necessários, incluindo um objeto `Adafruit_PCD8544` para controlar o display, e objetos `PushButton` para os botões.
 
-4. Declara variáveis para controlar a vida, a posição do "pad" (provavelmente uma plataforma no jogo), pontos e recordes.
+4. Declara variáveis para controlar a vida, a posição do "pad" (plataforma controlada pelo jogador), pontos e recordes.
 
 5. Declara variáveis booleanas para controlar o início e a pausa do jogo.
 
