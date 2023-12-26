@@ -80,7 +80,7 @@ void loop(){
       }
 
       //Chama a função pause quando buttonX for clicado durante o jogo  
-      if(buttonX.clickBtn())
+      if(buttonX.clickButton())
         pause(display, buttonX, intervalPosPause);
 
     } else {

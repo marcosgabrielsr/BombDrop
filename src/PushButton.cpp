@@ -1,41 +1,38 @@
-//
-// Classe PushButton
-//  arquivo cpp
+//Arquivo .cpp que contém os métodos
 
+//Incluindo arquivo .hpp que contém a classe
 #include "PushButton.hpp"
-    //Criando a função construtora da classe
-    PushButton::PushButton(const uint8_t pin, const uint16_t time):
-    _pin(pin), _time(time), delay1(0)
-    {
-        //define o pino do botão como entrada com resistor pullup
-        pinMode(_pin, INPUT_PULLUP);
-        old_state = true;
-    }
 
-    //Método pressBtn(): Verifica se o botão está pressioando, ou seja se for empurrado retornará true
-    //se não retornará false
-    bool PushButton::pressBtn(){
-      return !digitalRead(_pin);
-    }
+//Função construtora
+PushButton::PushButton(const int8_t _pin, const int16_t _interval):
+pin(_pin), interval(_interval), t(0), oldState(true){
+    //Definindo o pino do botão como pino de entrada com resistor PULLUP
+    pinMode(pin, INPUT_PULLUP);
+}
 
-    //Método clickBtn(): Verifica se o botão foi pressionado, e retorna true apenas no instante em que ele foi pressionado(clicado)
-    bool PushButton::clickBtn(){
-      //pegando a leitura digital do pino do botão 
-      bool state_btn = digitalRead(_pin);
-      bool value = false;
+//Função que verifica se o botão está pressionado
+bool PushButton::pressButton(){
+    //Retorna a leitura atual do botão
+    return !digitalRead(pin);
+}
 
-      //Verifica se já se passou um intervalo de 170 milissegundos
-      if((millis() - delay1) >= _time){
-        //Se o botão é pressinado
-        if(old_state && !state_btn){
-          //value se torna verdadeiro, e o intervalo é resetado
-          value = true;
-          delay1 = millis();
+//Função que verifica se o botão foi clicado
+bool PushButton::clickButton(){
+    //Armazenando o estado atual do botão
+    bool state = digitalRead(pin);
+    bool value = false;
+
+    //Verifica se passou um intervalo em milisegundos desde o último clique
+    if((millis() - t) >= interval){
+        if(oldState && !state){
+            value = true;
+            t = millis();
         }
-      }
-      //atualiza o estado anterior do botão
-      old_state = state_btn;
-
-      //retorna value
-      return value;
     }
+
+    //Atualiza o antigo estado do botão
+    oldState = state;
+
+    //Retorna value
+    return value;
+}

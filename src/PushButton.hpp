@@ -1,27 +1,24 @@
-//
-// Classe PushButtons
-//  arquivo hpp
+//Classe PushButton
 
 #ifndef PUSHBUTTON
 #define PUSHBUTTON
 
-//incluindo a biblioteca padrão do arduino
+//Incluindo a biblioteca padrão do arduino
 #include <Arduino.h>
 
-//Criando a classe PushButton
-class PushButton {
-  //definindo métodos públicos
-  public:
-    PushButton(const uint8_t pin, const uint16_t time);
-    bool pressBtn();
-    bool clickBtn();
+//Criando Classe PushButton
+class PushButton{
+    //Definindo atributos e métodos
+    public:
+        PushButton(const int8_t _pin, const int16_t _time); //Método construtor
+        bool pressButton();                                 //Função que verifica se o botão está pressionado
+        bool clickButton();                                 //Verifica se clicarão o botão
 
-  //definindo métodos privados
-  protected:  
-    const uint8_t _pin;
-    const uint16_t _time;
-    bool old_state;
-    unsigned long delay1;
+    protected:
+        unsigned long t;                            //instante do último clique do botão
+        const int8_t pin;                           //Pino onde o botão está conectado
+        const int16_t interval;                     //Intervalo para controle do efeito Bounce 
+        bool oldState;                              //Estado anterior do botão
 };
 
 #endif

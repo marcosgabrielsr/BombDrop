@@ -1,5 +1,5 @@
 **Autor**: Marcos Gabriel <br>
-**Data da última atualização**: 16/10/2023 
+**Data da última atualização**: 26/12/2023 
 
 ## Descrição
 Este projeto é uma interpretação e simplificação de jogos similiares ao "Food Drop" do Pou para arduino. A interface foi feita utilizando as bibliotecas `Adafruit_GFX.h` e `Adafruit_PCD8544.h`, além disso também utilizei uma classe com métodos para pushbuttons criada por mim.

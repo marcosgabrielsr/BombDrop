@@ -1,7 +1,7 @@
 #include "func.h"
 
 //Função que imprime na tela a tela inicial e a pontuação máxima
-void drawInitScreen(Adafruit_PCD8544 &display, PushButton button, int16_t record, bool &start){
+void drawInitScreen(Adafruit_PCD8544 &display, PushButton &button, int16_t record, bool &start){
     //Variáveis para controle da alternância do aviso de clique do botão
     static bool blink = true;
     static unsigned long time = 0;
@@ -39,7 +39,7 @@ void drawInitScreen(Adafruit_PCD8544 &display, PushButton button, int16_t record
     blink ? display.print("(X) to start!") : display.print("");
 
     //Altera star para true caso botão seja clicado
-    if(button.clickBtn()){
+    if(button.clickButton()){
         start = true;
 
         //Uma pausa de 350ms para início do jogo
@@ -48,8 +48,8 @@ void drawInitScreen(Adafruit_PCD8544 &display, PushButton button, int16_t record
 }
 
 //Função que pausa o game e seta a váriável para controle de um intervalo de 500 ms
-void pause(Adafruit_PCD8544 &display, PushButton button, bool &intervalPosPause){
-    while(!button.clickBtn()){
+void pause(Adafruit_PCD8544 &display, PushButton &button, bool &intervalPosPause){
+    while(!button.clickButton()){
         display.clearDisplay();
 
         display.setCursor(10, 40);
@@ -109,13 +109,13 @@ void drawPad(Adafruit_PCD8544 &display, PushButton &buttonL, PushButton &buttonR
 
     if((millis() - time) >= 30){
         //Caso pressionado o buttonL e x > 0, decrementamos x e atualizamos a variável time
-        if(buttonL.pressBtn() && padX > 0){
+        if(buttonL.pressButton() && padX > 0){
             padX -= 1;
             time = millis();
         }
             
         //Caso pressionado o buttonR e x < 37, incrementamos x e atualizamos a variável time
-        if(buttonR.pressBtn() && padX < 37){
+        if(buttonR.pressButton() && padX < 37){
             padX += 1;
             time = millis();
         }
