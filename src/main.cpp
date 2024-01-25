@@ -36,8 +36,8 @@ float interval = 40;
 
 void setup(){
   //Define led como pino de saída e deixa o led de fundo ligado
-  // pinMode(led, OUTPUT);
-  // digitalWrite(led, LOW);
+  pinMode(led, OUTPUT);
+  digitalWrite(led, LOW);
 
   //configuramos a função randomica de acordo com a porta A0 usando o randomSeed()
   randomSeed(analogRead(A0));
