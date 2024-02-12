@@ -1,5 +1,5 @@
 //Incluindo biblioteca principal do jogo
-#include "func.h"
+#include "bbd_func.h"
 
 //Mapeando Hardware:
 //pinos do display
@@ -34,13 +34,24 @@ bool intervalPosPause = false;
 //Variável para controle de tempo de queda da bomba
 float interval = 40;
 
+//Criando structs para controle dos itens e do pad
+falling_item item;
+pad player;
+
 void setup(){
   //Define led como pino de saída e deixa o led de fundo ligado
   pinMode(led, OUTPUT);
   digitalWrite(led, LOW);
 
-  //configuramos a função randomica de acordo com a porta A0 usando o randomSeed()
+  //configurando a função randomica de acordo com a porta A0 usando o randomSeed()
   randomSeed(analogRead(A0));
+
+  //configurando os atributos do pad e do item após o randomSeed
+  item.isBomb = random(1, 2);
+  item.x = random(0, 43);
+
+  player.btnL = &buttonL;
+  player.btnR = &buttonR;
 
   //Inicializando o display
   display.begin();
@@ -52,22 +63,20 @@ void setup(){
 void loop(){
   display.clearDisplay();
 
-  //Verifica se start é falso
-  if(start == false){
-    //Chama a função que desenha a tela inicial dos jogos
+  if(!start){
     drawInitScreen(display, buttonX, record, start);
-
-  }else{
+  
+  } else {
     if(life >= 1){
 
       //Chama as funções que definem o jogo
       drawSky(display);
 
-      drawPad(display, buttonL, buttonR, padX);
+      drawPad(display, player);
 
-      drawFallenItens(display, life, points, padX, interval);
+      drawFallenItens(display, player, item, interval);
 
-      drawLifeAndPoints(display, life, points);
+      drawLifeAndPoints(display, player);
 
       //Para o jogo por 500 ms depois de ser despausado
       if(intervalPosPause){

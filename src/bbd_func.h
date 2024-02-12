@@ -8,7 +8,7 @@
 #include "PushButton.hpp"
 
 // 'sky', 48x25px
-const unsigned char epd_bitmap_sky [] PROGMEM = {
+const unsigned char bitmap_sky [] PROGMEM = {
 	0x00, 0xc0, 0x80, 0x00, 0x01, 0xf8, 0xfb, 0x80, 0xf8, 0x00, 0x1f, 0x0e, 0x0e, 0x00, 0x0c, 0x3f, 
 	0xf0, 0x03, 0x00, 0x00, 0x06, 0x66, 0x00, 0x01, 0x00, 0x00, 0x01, 0x80, 0x00, 0x00, 0x00, 0x00, 
 	0x31, 0x00, 0x00, 0x00, 0x00, 0x1f, 0xcf, 0xf8, 0x00, 0x00, 0x00, 0xf1, 0x86, 0x04, 0x00, 0x00, 
@@ -22,23 +22,49 @@ const unsigned char epd_bitmap_sky [] PROGMEM = {
 };
 
 // 'pad', 11x3px
-const unsigned char epd_bitmap_pad [] PROGMEM = {
+const unsigned char bitmap_pad [] PROGMEM = {
 	0xff, 0xe0, 0x7f, 0xc0, 0x3f, 0x80
 };
 
 // 'bomb', 6x6px
-const unsigned char epd_bitmap_bomb [] PROGMEM = {
+const unsigned char bitmap_bomb [] PROGMEM = {
 	0x30, 0x78, 0x84, 0x84, 0x84, 0x78
 };
 
 // 'heart', 7x5px
-const unsigned char epd_bitmap_heart [] PROGMEM = {
+const unsigned char bitmap_heart [] PROGMEM = {
 	0x6c, 0xfe, 0x7c, 0x38, 0x10
 };
 
 // 'anchor', 6x6px
-const unsigned char epd_bitmap_anchor [] PROGMEM = {
+const unsigned char bitmap_anchor [] PROGMEM = {
 	0x30, 0x78, 0x30, 0x30, 0xb4, 0x48
+};
+
+//registro para trabalhar com o pad
+struct pad{
+	//Variável para armazenar os pontos de vida do pad
+	uint8_t life;
+
+	//Variável para armazenar os pontos do player
+	int points;
+
+	//Variável para controle da coordenada X do padX
+	uint8_t x = 18;
+
+	//Botões para navegação do pad
+	PushButton *btnL;
+	PushButton *btnR;
+};
+
+//registro para trabalhar com os itens que caem
+struct falling_item{
+	//Variável para controle do tipo do item
+	bool isBomb;
+
+	//Variáveis para controle das coordenadas do item
+	uint8_t x;
+	uint8_t y = 10;
 };
 
 //Função que imprime na tela a tela inicial e a pontuação máxima
@@ -51,11 +77,11 @@ void pause(Adafruit_PCD8544 &display, PushButton &button, bool &intervalPosPause
 void drawSky(Adafruit_PCD8544 &display);
 
 //Função que imprime no display a linha que separa o campo do jogo, vidas e pontos do jogador
-void drawLifeAndPoints(Adafruit_PCD8544 &display, uint8_t &life, uint16_t &points);
+void drawLifeAndPoints(Adafruit_PCD8544 &display, pad &player);
 
 //Função que imprime o pad no campo e altera a posição segundo o comando dos controles
-void drawPad(Adafruit_PCD8544 &display, PushButton &buttonL, PushButton &buttonR, uint8_t &padX);
+void drawPad(Adafruit_PCD8544 &display, pad &player);
 
 //Função que imprime as bombas que caem sempre em uma posição diferente da última
 //Além disso, essa função já faz o tratamento de pontos e perda de vida
-void drawFallenItens(Adafruit_PCD8544 &display, uint8_t &life,uint16_t &points, uint8_t padX, float &interval);
+void drawFallenItens(Adafruit_PCD8544 &display, pad &player, falling_item &item, float &interval);

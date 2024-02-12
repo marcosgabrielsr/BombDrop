@@ -1,4 +1,4 @@
-#include "func.h"
+#include "bbd_func.h"
 
 //Função que imprime na tela a tela inicial e a pontuação máxima
 void drawInitScreen(Adafruit_PCD8544 &display, PushButton &button, int16_t record, bool &start){
@@ -66,21 +66,21 @@ void pause(Adafruit_PCD8544 &display, PushButton &button, bool &intervalPosPause
 
 //Função que imprime o céu no campo do jogo
 void drawSky(Adafruit_PCD8544 &display){
-    display.drawBitmap(0,0, epd_bitmap_sky, 48, 25, BLACK);
+    display.drawBitmap(0,0, bitmap_sky, 48, 25, BLACK);
 }
 
 //Função que imprime no display a linha que separa o campo do jogo, vidas e pontos do jogador
-void drawLifeAndPoints(Adafruit_PCD8544 &display, uint8_t &life, uint16_t &points){
+void drawLifeAndPoints(Adafruit_PCD8544 &display, pad &player){
     //Imprimimos a linha que divide as informações do player do campo
     display.drawLine(0, 73, 48, 73, BLACK);
 
     //imprimimos os corações segundo o número de vidas do player
-    if(life >= 1)
-        display.drawBitmap(0,78,epd_bitmap_heart, 7, 5, BLACK);
-    if(life >= 2)
-        display.drawBitmap(8, 78,epd_bitmap_heart, 7, 5, BLACK);
-    if(life >= 3)
-        display.drawBitmap(16, 78, epd_bitmap_heart, 7, 5, BLACK);
+    if(player.life >= 1)
+        display.drawBitmap(0,78, bitmap_heart, 7, 5, BLACK);
+    if(player.life >= 2)
+        display.drawBitmap(8, 78, bitmap_heart, 7, 5, BLACK);
+    if(player.life >= 3)
+        display.drawBitmap(16, 78, bitmap_heart, 7, 5, BLACK);
 
     //Setamos o cursor e condifuramos o texto para imprimirmos os pontos do jogador
     display.setCursor(24, 76);
@@ -91,60 +91,57 @@ void drawLifeAndPoints(Adafruit_PCD8544 &display, uint8_t &life, uint16_t &point
     display.print("x");
     
     //Adicionamos zeros que ocuparam as casas das dezenas e centenas caso elas sejam zero
-    if(points < 10)
+    if(player.points < 10)
         display.print("00");
-    else if(points < 100)
+    else if(player.points < 100)
         display.print("0");
     
     //Por fim, imprimos os pontos do player
-    display.print(points);
+    display.print(player.points);
 }
 
 //Função que imprime o pad no campo e altera a posição segundo o comando dos controles
-void drawPad(Adafruit_PCD8544 &display, PushButton &buttonL, PushButton &buttonR, uint8_t &padX){
+void drawPad(Adafruit_PCD8544 &display, pad &player){
     //Variavel para controle de intervalo do pad
     static unsigned long time = 0;
 
-    display.drawBitmap(padX, 64, epd_bitmap_pad, 11, 3, BLACK);
+    display.drawBitmap(player.x, 64, bitmap_pad, 11, 3, BLACK);
 
     if((millis() - time) >= 30){
         //Caso pressionado o buttonL e x > 0, decrementamos x e atualizamos a variável time
-        if(buttonL.pressButton() && padX > 0){
-            padX -= 1;
+        if(player.btnL->pressButton() && player.x > 0){
+            player.x -= 1;
             time = millis();
         }
             
         //Caso pressionado o buttonR e x < 37, incrementamos x e atualizamos a variável time
-        if(buttonR.pressButton() && padX < 37){
-            padX += 1;
+        if(player.btnR->pressButton() && player.x < 37){
+            player.x += 1;
             time = millis();
         }
     }
-    
 }
 
-//Função que gera os novos itens necessários e reseta a posição y para 0 e gera uma nova posição x
+//Função que gera os novos itens necessários e reseta a posição y para 0 e gera uma
+//nova posição x
 /*OBS: NOTE QUE ESTÃO SENDO UTILIZADOS PONTEIROS*/
-void genAndRestarItens(int8_t *x, int8_t *y, bool *isBomb){
+void genAndRestarItens(falling_item &item){
     //Para deicidir o item que irá cair, será pego um item aleatório, e se ele for par ou divisel por 3 será uma bomba
     //caso contrário será uma âncora
     int8_t a = random(0, 100);
-    if(a % 2 == 0 || a % 3 == 0)
-        *isBomb = true;
-    else
-        *isBomb = false;
 
-    *x = random(0, 43);              //setamos uma nova posição x para o item que vai cair
-    *y = 10;                          //zera-se o eixo y
+    if(a % 2 == 0 || a % 3 == 0)
+        item.isBomb = true;
+    else
+        item.isBomb = false;
+
+    item.x = random(0, 43);                 //setamos uma nova posição x para o item que vai cair
+    item.y = 10;                            //zera-se o eixo y
 }
 
 //Função que imprime as bombas que caem sempre em uma posição diferente da última
 //Além disso, essa função já faz o tratamento de pontos e perda de vida
-void drawFallenItens(Adafruit_PCD8544 &display, uint8_t &life,uint16_t &points, uint8_t padX, float &interval){
-    //coorenadas da bomba
-    static int8_t x = random(0, 43), y = 10;
-    static bool isBomb = true;
-
+void drawFallenItens(Adafruit_PCD8544 &display, pad &player, falling_item &item, float &interval){
     //Variáveis para controle e atualização do tempo de queda da bomba
     const float dValues[4] = {0.1, 0.15, 0.2, 0.34};
 
@@ -152,39 +149,40 @@ void drawFallenItens(Adafruit_PCD8544 &display, uint8_t &life,uint16_t &points, 
     static unsigned long time = 0;
 
     //verifica quando a bomba chega na linha final
-    if(y >= 61 && y <= 63){
+    if(item.y >= 61 && item.y <= 63){
         //Verificamos se uma das extremidades da bomba toca em pelo menus um pixel do pad ou se elas se encontram no range do pad
-        if((x >= padX && x <= (padX + 10)) || ((x + 6) >= padX && (x + 6) <= (padX + 10))){ //Se sim....
-            if(isBomb)                         //Se for uma bomba...   
-                points += 1;                   //Incrementamos os pontos
+        if((item.x >= player.x && item.x <= (player.x + 10)) ||
+           ((item.x + 6) >= player.x && (item.x + 6) <= (player.x + 10))){ //Se sim....
+
+            if(item.isBomb)                         //Se for uma bomba...   
+                player.points += 1;                   //Incrementamos os pontos
             else                               //Caso seja uma âncora...
-                life -= 1;                     //É decrementado a vida do player
+                player.life -= 1;                     //É decrementado a vida do player
             
-            //Resentando as coordenadas e gerando novo item
-            genAndRestarItens(&x, &y, &isBomb);
+            genAndRestarItens(item);
 
             interval -= dValues[random(0, 4)]; //diminui-se o tempo de queda da bomba de forma aleatória
-        }                                   
-    } else if(y >= 68){
-            //Quando chega ao fim do campo, verifica fica se é uma bomba...
-            if(isBomb)                            //caso seja...
-                life -= 1;                  //decrementamos a vida do player
-
-            interval -= dValues[random(0, 4)]; //diminui-se o tempo de queda da bomba de forma aleatória
-
-            //Por fim, gera um novo item 
-            genAndRestarItens(&x, &y, &isBomb);
         }
 
+    } else if(item.y >= 68){
+        //Quando chega ao fim do campo, verifica fica se é uma bomba...
+        if(item.isBomb)                            //caso seja...
+            player.life -= 1;                  //decrementamos a vida do player
+
+        genAndRestarItens(item);
+
+        interval -= dValues[random(0, 4)]; //diminui-se o tempo de queda da bomba de forma aleatória
+    }
+
     //Desenha a bomba ou a ancora na tela, se isBomb é verdadeiro desenha bomba, caso contrário desenha ancora
-    if(isBomb)
-        display.drawBitmap(x, y, epd_bitmap_bomb, 6, 6, BLACK);
+    if(item.isBomb)
+        display.drawBitmap(item.x, item.y, bitmap_bomb, 6, 6, BLACK);
     else
-        display.drawBitmap(x, y, epd_bitmap_anchor, 6, 6, BLACK);
+        display.drawBitmap(item.x, item.y, bitmap_anchor, 6, 6, BLACK);
     
     //verirfica se passou um intervalo de x milissegundos
     if((millis() - time) >= interval){
         time = millis();        //Caso tenha passado, atualizamos a time e incrementamods y
-        y += 1;
+        item.y += 1;
     }
 }
