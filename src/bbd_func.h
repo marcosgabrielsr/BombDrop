@@ -43,28 +43,24 @@ const unsigned char bitmap_anchor [] PROGMEM = {
 
 //registro para trabalhar com o pad
 struct pad{
-	//Variável para armazenar os pontos de vida do pad
-	uint8_t life;
+	uint8_t life = 1;			//Variável para armazenar os pontos de vida do pad
 
-	//Variável para armazenar os pontos do player
-	int points;
+	int points;					//Variável para armazenar os pontos do player
 
-	//Variável para controle da coordenada X do padX
-	uint8_t x = 18;
+	uint8_t x = 18;				//Variável para controle da coordenada X do padX
 
-	//Botões para navegação do pad
-	PushButton *btnL;
-	PushButton *btnR;
+	PushButton *btnL;			//Ponteiro que aponta para o botão da esquerda
+	PushButton *btnR;			//Ponteiro que aponta para o botão da esquerda
 };
 
 //registro para trabalhar com os itens que caem
-struct falling_item{
-	//Variável para controle do tipo do item
-	bool isBomb;
+struct fallingItem{
+	bool isBomb;				//Variável para controle do tipo do item
 
-	//Variáveis para controle das coordenadas do item
-	uint8_t x;
-	uint8_t y = 10;
+	uint8_t x;					//Variável para controle da coordenada x do item
+	uint8_t y;					//Variável para controle da coordenada y do item
+
+	struct fallingItem * prox;	//Variável que armazena o endereço para o próximo item
 };
 
 //Função que imprime na tela a tela inicial e a pontuação máxima
@@ -73,15 +69,18 @@ void drawInitScreen(Adafruit_PCD8544 &display, PushButton &button, int16_t recor
 //Função que pausa o game e seta a váriável para controle de um intervalo de 500 ms
 void pause(Adafruit_PCD8544 &display, PushButton &button, bool &intervalPosPause);
 
-//Função que imprime o céu no campo do jogo
-void drawSky(Adafruit_PCD8544 &display);
-
-//Função que imprime no display a linha que separa o campo do jogo, vidas e pontos do jogador
-void drawLifeAndPoints(Adafruit_PCD8544 &display, pad &player);
+//Função que imprime no display o campo de jogo (céu, quantidade de vidas e pontos)
+void drawFieldGame(Adafruit_PCD8544 &display, pad &player);
 
 //Função que imprime o pad no campo e altera a posição segundo o comando dos controles
 void drawPad(Adafruit_PCD8544 &display, pad &player);
 
-//Função que imprime as bombas que caem sempre em uma posição diferente da última
-//Além disso, essa função já faz o tratamento de pontos e perda de vida
-void drawFallenItens(Adafruit_PCD8544 &display, pad &player, falling_item &item, float &interval);
+//Função que desenha o item na tela enquanto ele está caindo
+void drawFallingItem(Adafruit_PCD8544 &display, fallingItem* &itens, float &interval, pad &player);
+
+//Função que adiciona um novo item para a fila de itens
+void addItem(fallingItem* &itens);
+
+//Função que verifica a colisão do item com o pad ou fim do campo
+//e gerencia se o player perderá uma vida ou ganhará um ponto
+bool itemColision(fallingItem* &itens, pad &player);
