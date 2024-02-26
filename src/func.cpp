@@ -161,7 +161,7 @@ void itemColision(fallingItem* &itens, pad &player, float &interval) {
                     player.life--;
                 
                 //Diminui o intervalo de atualização da posição das bombas
-                interval -= 0.1 * random(3, 8);
+                interval -= 0.01 * random(3, 8);
                 Serial.println(interval);
 
                 removeItem(itens);
