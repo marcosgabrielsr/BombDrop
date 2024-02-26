@@ -8,8 +8,9 @@
 #include "PushButton.hpp"
 
 //================================== Declarando constantes
-#define INIT_INTERVAL 30
-#define INIT_TIME 2360
+#define INIT_INTERVAL 30				//Tempo inicial para atualização da posição y do item
+#define INIT_TIME 1770					//Tempo inicial que um item demora para nascer e desaparecer
+#define GROUND_COORDINATE 68			//Coordenada y do item ao tocar na linha (solo)
 
 //================================== Declarando Bitmaps
 // 'init_screen', 48x84px

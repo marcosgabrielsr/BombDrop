@@ -162,13 +162,13 @@ void itemColision(fallingItem* &itens, pad &player, float &interval) {
                 
                 //Diminui o intervalo de atualização da posição das bombas
                 interval -= 0.01 * random(3, 8);
-                Serial.println(interval);
+                //Serial.println(interval);
 
                 removeItem(itens);
         }
     
     //Verifica se o item chegou ao fim do campo
-    } else if(item->y >= 68) {
+    } else if(item->y >= GROUND_COORDINATE) {
         //Verifica se é uma bomba (life--)
         if (item->isBomb)
             player.life--;
@@ -212,6 +212,6 @@ void newItem(uint16_t &time, unsigned long &i, fallingItem* &items) {
         addItem(items);                 //Adiciona um item à fila itens
 
         i = millis();                   //Atualizamos o último instante de atualização
-        time -= 2;                 //Diminui o tempo entre as gerações em 5 ms
+        time -= 8;                      //Diminui o tempo entre as gerações em 5 ms
     }
 }

@@ -64,7 +64,7 @@ void loop(){
     drawInitScreen(display, buttonX, record, start);
   
   else {
-    i = millis() - INIT_INTERVAL + 100;
+    i = millis() - INIT_INTERVAL + 200;
 
     //Equanto o player ainda tiver pontos de vida
     while(player.life > 0) {
