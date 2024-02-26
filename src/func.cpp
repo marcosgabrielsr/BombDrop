@@ -117,8 +117,8 @@ void addItem(fallingItem* &itens) {
         return;
     }
 
-    //Código onde se tem 70% de ser bomba e 30% de ser ancora
-    (random(1, 11) <= 7) ? newItem->isBomb = true : newItem->isBomb = false;
+    //Código onde se tem 60% de ser bomba e 40% de ser ancora
+    (random(1, 11) <= 6) ? newItem->isBomb = true : newItem->isBomb = false;
 
     newItem->x = random(0, 43);
     newItem->y = 10;
