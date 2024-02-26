@@ -29,7 +29,9 @@ uint16_t record = 0;
 bool start = false;
 
 //Variável para controle de tempo de queda da bomba
-float interval = 200;
+float interval = INIT_INTERVAL;
+uint16_t time = INIT_TIME;
+unsigned long i = 0;
 
 //Criando structs para controle dos itens e do pad
 fallingItem *itens = NULL;
@@ -58,15 +60,39 @@ void setup(){
 void loop(){
   display.clearDisplay();
 
-  drawFieldGame(display, player);
+  if(!start)
+    drawInitScreen(display, buttonX, record, start);
+  
+  else {
+    i = millis() - INIT_INTERVAL + 100;
 
-  if(buttonX.clickButton())
-    addItem(itens);
+    //Equanto o player ainda tiver pontos de vida
+    while(player.life > 0) {
+      display.clearDisplay();
 
-  drawFallingItem(display, itens, interval, player);
-  drawPad(display, player);
+      drawFieldGame(display, player);
 
-  itemColision(itens, player);
+      newItem(time, i, itens);
+      drawFallingItem(display, itens, interval, player);
+
+      drawPad(display, player);
+      itemColision(itens, player, interval);
+
+      display.display();
+    }
+    
+    //start volta a ser false para impressão da tela inicial
+    start = false;
+    record = player.points;
+    player.points = 0;
+    player.life = 3;
+    time = 100;
+    interval = INIT_INTERVAL;
+    time = INIT_TIME;
+
+    while(itens != NULL) removeItem(itens);         //Código que esvazia toda a fila
+
+  }
 
   display.setRotation(1);
   display.display();

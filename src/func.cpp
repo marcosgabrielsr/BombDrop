@@ -6,26 +6,11 @@ void drawInitScreen(Adafruit_PCD8544 &display, PushButton &button, int16_t recor
     static bool blink = true;
     static unsigned long time = 0;
 
-    //Desenha um retângulo que cerca toda a tela
-    display.drawRect(0, 0, 48, 84, BLACK);
-
-    //Desenha um retângulo sobre o título do jogo
-    display.drawRect(2, 6, 44, 21, BLACK);
-
-    //Configurando display para escrita do título
-    display.setCursor(4, 8);
-    display.setTextColor(BLACK);
-    display.setTextSize(1);
-
-    //Escrevendo título
-    display.println("BOMB");
-    display.setCursor(21, 18);
-    display.print("DROP");
+    display.drawBitmap(0, 0, bitmap_init_screen, 48, 84, BLACK);
 
     //Configurando e escrevendo o record
-    display.setCursor(4, 40);
-    display.print("RECORD: ");
-    display.setCursor(20, 50);
+    display.setCursor(10, 52);
+    display.print("R:");
     display.print(record);
 
     //Verifica se passou um intervalo de 700 ms
@@ -34,9 +19,9 @@ void drawInitScreen(Adafruit_PCD8544 &display, PushButton &button, int16_t recor
         time = millis();
     }
 
-    //Configura e escreve a mensagem caso blink seja verdadeiro
-    display.setCursor(8, 64);
-    blink ? display.print("(X) to start!") : display.print("");
+    //Configurando mensagem do blink
+    display.setCursor(3, 62);
+    blink ? display.print("x:start") : display.print("");
 
     //Altera star para true caso botão seja clicado
     if(button.clickButton()){
@@ -123,6 +108,7 @@ void drawPad(Adafruit_PCD8544 &display, pad &player) {
 
 //Função que adiciona um novo item para a fila de itens
 void addItem(fallingItem* &itens) {
+    //Ponteiros para percorrer a fila e para adicionar novo item
     fallingItem *p = itens, *newItem = NULL;
 
     newItem = (fallingItem*) calloc (1, sizeof(fallingItem));
@@ -131,7 +117,9 @@ void addItem(fallingItem* &itens) {
         return;
     }
 
-    newItem->isBomb = random(0, 2);
+    //Código onde se tem 70% de ser bomba e 30% de ser ancora
+    (random(1, 11) <= 7) ? newItem->isBomb = true : newItem->isBomb = false;
+
     newItem->x = random(0, 43);
     newItem->y = 10;
     newItem->prox = NULL;
@@ -157,7 +145,7 @@ void removeItem(fallingItem* &itens) {
 
 //Função que verifica a colisão do item com o pad ou fim do campo
 //e gerencia se o player perderá uma vida ou ganhará um ponto
-bool itemColision(fallingItem* &itens, pad &player) {
+void itemColision(fallingItem* &itens, pad &player, float &interval) {
     fallingItem *item = itens;
     
     //Verifica se o item chega em um intervalo onde o pad pode pegálo
@@ -172,8 +160,11 @@ bool itemColision(fallingItem* &itens, pad &player) {
                 else
                     player.life--;
                 
+                //Diminui o intervalo de atualização da posição das bombas
+                interval -= 0.1 * random(3, 8);
+                Serial.println(interval);
+
                 removeItem(itens);
-                return true;
         }
     
     //Verifica se o item chegou ao fim do campo
@@ -183,10 +174,7 @@ bool itemColision(fallingItem* &itens, pad &player) {
             player.life--;
         
         removeItem(itens);
-        return true;
     }
-
-    return false;
 }
 
 //Função que desenha o item na tela enquanto ele está caindo
@@ -196,21 +184,34 @@ void drawFallingItem(Adafruit_PCD8544 &display, fallingItem* &itens, float &inte
     uint8_t aux = 0;
 
     //Verifica se passou interval ms
-    if((millis() - t) >= interval)
-        aux = 1;
+    if((millis() - t) >= interval){
+        t = millis();                   //atualizamos a variável t
+        aux = 1;                        //atualizamos o aux para 1 (atualiza a posição dos items)
+    }
 
     //Percorre e desenha todos os itens da lista e os desenha
     while(p != NULL) {
+        //Caso o item seja uma bomba...
         if(p->isBomb)
-            display.drawBitmap(p->x, p->y, bitmap_bomb, 6, 6, BLACK);
+            display.drawBitmap(p->x, p->y, bitmap_bomb, 6, 6, BLACK); //Desenha uma bomba
+        
+        //Caso contrário...
         else
-            display.drawBitmap(p->x, p->y, bitmap_anchor, 6, 6, BLACK);
+            display.drawBitmap(p->x, p->y, bitmap_anchor, 6, 6, BLACK); //Desenha uma âncora
 
         p->y += aux;
         p = p->prox;
     }
+}
 
-    //Caso aux == 1, resetamos a variável t
-    if(aux == 1)
-        t = millis();
+//Função que verifica se passou um intervalo de tempo para chamar addItem
+void newItem(uint16_t &time, unsigned long &i, fallingItem* &items) {
+    //Verifica se desde o último instante de geração de uma nova bomba, passou um intervalo
+    //de timeToAdd ms
+    if((millis() - i) >= time){
+        addItem(items);                 //Adiciona um item à fila itens
+
+        i = millis();                   //Atualizamos o último instante de atualização
+        time -= 2;                 //Diminui o tempo entre as gerações em 5 ms
+    }
 }
