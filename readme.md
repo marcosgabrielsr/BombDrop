@@ -3,11 +3,12 @@
 
 ## Descrição
 Este projeto é uma interpretação e simplificação de jogos similiares ao "Food Drop" do Pou para arduino. A interface foi feita utilizando as bibliotecas `Adafruit_GFX.h` e `Adafruit_PCD8544.h`, além disso também utilizei uma classe com métodos para pushbuttons criada por mim.
-Mesmo sendo um projeto simples, acredito que seja interessante para estudo e aprendizado.
+Mesmo sendo um projeto simples, acredito que seja interessante para estudo e aprendizado, pois, utiliza de conceitos interessantes como programação orientada a objetos, uso de structs e uso de uma estrutura de dados simples (fila simplesmente encadeada);
 
-Em resumo, neste jogo você controla uma plataforma que se move apenas na direção **x**, seu dever é evitar que as bombas passem da plataforma. Caso a bomba passe da linha da plataforma, você perde um ponto de vida, se o total de pontos de vida forem zero, fim de jogo. Caso caia uma âncora ao invés de uma bomba, deve evitá-la, pois caso você pegue a âncora com a plataforma perderá um ponto de vida.
+Em resumo, neste jogo você controla uma plataforma que se move apenas na direção **x**, seu dever é evitar que as bombas passem da plataforma. Caso a bomba passe da linha da plataforma, você perde um ponto de vida, se o total de pontos de vida forem zero, fim de jogo. Caso caia uma âncora ao invés de uma bomba, deve evitá-la, pois caso a âncora toque na plataforma perderá um ponto de vida.
 
 Bombas e âncoras são geradas de forma pseudo-aleatórias em posições pseudo-aleatórias. Sempre que elas passão do campo do jogo ou são pegas pelo pad, são geradas novamente em outras posições.
+Com o decorrer do tempo, a velocidade de queda dos items é aumentada e o intervalo de geração entre cada item é diminuido, podendo assim ter mais de um item "caindo".
 
 <div align="center">
   <img src="https://cdn.discordapp.com/attachments/1153711382336909332/1163666420677234819/IMG-20230909-WA0074.jpg?ex=654067ce&is=652df2ce&hm=534c77987993fd8685b42c0ba37b979d68e9cdb51efe439247b89c3f099c4f49&">
@@ -16,7 +17,7 @@ Bombas e âncoras são geradas de forma pseudo-aleatórias em posições pseudo-
 
 **OBS**: A IDE utilizada para criação deste projeto é o PlatformIO, mas para trabalhar com o código pode ser utilizado também a Arduino IDE. Além disso, os sprites do jogo podem ser visualizados na pasta *imagens*.
 
-## Estrutuarção do Código
+## Estruturação do Código
 ### Estrutura do Código:
 
 1. Inclui bibliotecas necessárias, como `Arduino.h` para funcionalidades do Arduino, `Adafruit_GFX` e `Adafruit_PCD8544` para controlar o display LCD, além de outros arquivos de cabeçalho personalizados.
