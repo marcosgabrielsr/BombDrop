@@ -78,6 +78,24 @@ void loop(){
       drawPad(display, player);
       itemColision(itens, player, interval);
 
+      if(buttonX.clickButton()){
+        unsigned long d = millis() - i;
+
+        pause(display, buttonX);
+
+        display.clearDisplay();
+
+        drawFieldGame(display, player);
+        drawFallingItem(display, itens, interval, player);
+        drawPad(display, player);
+
+        display.display();
+
+        delay(3000);
+
+        i = millis() - d;
+      }
+
       display.display();
     }
     

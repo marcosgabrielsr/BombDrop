@@ -33,7 +33,7 @@ void drawInitScreen(Adafruit_PCD8544 &display, PushButton &button, int16_t recor
 }
 
 //Função que pausa o game e seta a váriável para controle de um intervalo de 500 ms
-void pause(Adafruit_PCD8544 &display, PushButton &button, bool &intervalPosPause) {
+void pause(Adafruit_PCD8544 &display, PushButton &button) {
     while(!button.clickButton()){
         display.clearDisplay();
 
@@ -45,8 +45,6 @@ void pause(Adafruit_PCD8544 &display, PushButton &button, bool &intervalPosPause
 
         display.display();
     }
-
-    intervalPosPause = true;
 }
 
 //Função que imprime no display o campo de jogo (céu, quantidade de vidas e pontos)

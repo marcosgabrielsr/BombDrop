@@ -111,7 +111,7 @@ struct fallingItem{
 void drawInitScreen(Adafruit_PCD8544 &display, PushButton &button, int16_t record, bool &start);
 
 //Função que pausa o game e seta a váriável para controle de um intervalo de 500 ms
-void pause(Adafruit_PCD8544 &display, PushButton &button, bool &intervalPosPause);
+void pause(Adafruit_PCD8544 &display, PushButton &button);
 
 //Função que imprime no display o campo de jogo (céu, quantidade de vidas e pontos)
 void drawFieldGame(Adafruit_PCD8544 &display, pad &player);
