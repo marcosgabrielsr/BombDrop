@@ -7,7 +7,7 @@
 Este projeto consiste em um jogo desenvolvido para plataforma arduino e similares, que utiliza um display Nokia 5110 para exibir gráficos e interagir com o jogador. O jogo foi desenvolvido na PlatformIO IDE utilizando as bibliotecas Adafruit_GFX e Adafruit_PCD8544.
 
 ## Objetivo
-Seu principal objetivo neste jogo é não permitir que as bombas chegam ao final do campo as recolhendo com sua plataforma, cada bomba recolhida lhe dá um ponto. Caso você tente recolher uma âncora ou permitir que uma bomba chegue ao fim do campo, você perde um ponto de vida.
+Seu principal objetivo neste jogo, é não permitir que as bombas cheguem ao final do campo as recolhendo com sua plataforma, cada bomba recolhida lhe dá um ponto. Caso você tente recolher uma âncora ou permitir que uma bomba chegue ao fim do campo, você perde um ponto de vida.
 
 Portanto, preste atenção e teste seus reflexos para acumular a maior quantidade de pontos possíveis.
 
@@ -55,18 +55,18 @@ Para diminuir a quantidade de parâmetros passados por função e também melhor
     - `PushButton *btnR`: Campo resonável por armazenar o ponteiro de um objeto PushButton utilizado para mover a plataforma para Direita;
 
 - ### Struct fallingItem:
-  - **Descrição**: Struct utilizada para representar um elemento de uma fila simplesmente encadeada, responsável por armazenar os itens que estão aparentes na tela.
+  - **Descrição**: Struct utilizada para representar um elemento de uma fila simplesmente encadeada, responsável por armazenar os itens que serão imprimidos aparentes na tela.
 
   - **Campos**:
-    - `bool isBomb`: Campo responsável por informar se o novo item é uma bomba(true) ou uma âncora(false);
+    - `bool isBomb`: Campo responsável por informar se o item é uma bomba(true) ou uma âncora(false);
     - `uint8_t x`: Campo responsável por armazenar a coordenada x do item;
     - `uint8_t y`: Campo responsável por armazenar a coordenada y do item;
     - `struct fallingItem * prox`: Campo responsável por apontar para o próximo item da fila;
 
 ## Funcionalidades
-- `drawInitScreen`: Função responsável por imprimir a tela inicial do jogo. Ela se mantém na tela enquanto apresentando o record desde a última vez que ele ligou o mini game. Caso o botão X seja clicado nesta tela, o jogo é iniciado.
+- `drawInitScreen`: Função responsável por imprimir a tela inicial do jogo. Ela se mantém na tela apresentando o record desde a última vez que ele ligou o mini game. Caso o botão X seja clicado nesta tela, o jogo é iniciado.
 
-- `pause`: Função responsável por imprimir a tela de pausa quando o botão X é pressionado durante a partida. Quando o botão X é pressionado novamente, o campo do jogo é apresentado novamente parado, dando ao jogador 3s até que tudo volte a ser executado novamente.
+- `pause`: Função responsável por imprimir a tela de pausa quando o botão X é pressionado durante a partida. Quando o botão X é pressionado novamente, o campo do jogo é apresentado novamente com todos os elementos estáticos, dando ao jogador 3s até que tudo volte a se mover novamente.
 
 - `drawFieldGame`: Função responsável por imprimir na tela o céu, linha que divide o campo das informações, pontos de vida e pontos ganhos(ganhos quando o jogador pega as bombas).
 
@@ -78,10 +78,9 @@ Para diminuir a quantidade de parâmetros passados por função e também melhor
 
 - `removeItem`: Função responsável por desalocar itens da fila que contém os itens que estão caindo.
 
-- `newItem`: Funçã responsável por chamar à função `addItem` após se passar um intervalo de `time` milissegundos. Além disso, adiciona o tempo entre a adição de itens em 8 milissegundos;
+- `newItem`: Função responsável por chamar à função `addItem` após se passar um intervalo de `time` milissegundos. Além disso, reduz o tempo entre a adição de itens em 8 milissegundos;
 
-- `itemColision`: Função responsável por verificar se o item sofreu colisão com o pad ou com o fim do campo, e faz a devida atualização de status do jogador.
-
+- `itemColision`: Função responsável por verificar se o item sofreu colisão com o pad ou com o fim do campo, fazendo a devida atualização dos status do jogador e chamando a função `removeItem`.
 
 ## Contribuição:
 Se deseja contribuir para o projeto, sinta-se à vontade para abrir problemas ou enviar solicitações de pull requests.
