@@ -39,18 +39,30 @@ Este projeto consiste em um jogo desenvolvido para plataforma arduino e similare
 ## Estruturas de Dados Personalizadas:
 Para diminuir a quantidade de parâmetros passados por função e também melhorar a leitura do códigos foram criadas as seguintes structs: `pad` e `fallingItem`.
 
-- ### Struct Pad:
+- ### Struct pad:
   - **Descrição**: Struct utilizada para representar a plataforma controlada pelo jogador, armazenando suas coordenadas x, pontos ganhos, pontos de vida e botões de ação (L e R).
 
   - **Campos**:
-    - `life`: Campo responsável por armazenar os pontos de vida do jogador;
-    - `points`: Campo responsável por armazenar os pontos ganhos pelo jogador ao recolher as bombas;
-    - `x`: Campo responsável por armazenar à coorenada x da plataforma;
-    - `btnL`: Campo resonável por armazenar o ponteiro de um objeto PushButton utilizado para mover a plataforma para esquerda;
-    - `btnR`: Campo resonável por armazenar o ponteiro de um objeto PushButton utilizado para mover a plataforma para Direita;
+    - `uint8_t life`: Campo responsável por armazenar os pontos de vida do jogador;
+    - `int points`: Campo responsável por armazenar os pontos ganhos pelo jogador ao recolher as bombas;
+    - `uint8_t x`: Campo responsável por armazenar à coorenada x da plataforma;
+    - `PushButton *btnL`: Campo resonável por armazenar o ponteiro de um objeto PushButton utilizado para mover a plataforma para esquerda;
+    - `PushButton *btnR`: Campo resonável por armazenar o ponteiro de um objeto PushButton utilizado para mover a plataforma para Direita;
+
+- ### Struct fallingItem:
+  - **Descrição**: Struct utilizada para representar um elemento de uma fila simplesmente encadeada, responsável por armazenar os itens que estão aparentes na tela.
+
+  - **Campos**:
+    - `bool isBomb`: Campo responsável por informar se o novo item é uma bomba(true) ou uma âncora(false);
+    - `uint8_t x`: Campo responsável por armazenar a coordenada x do item;
+    - `uint8_t y`: Campo responsável por armazenar a coordenada y do item;
+    - `struct fallingItem * prox`: Campo responsável por apontar para o próximo item da fila;
 
 ## Funcionalidades
 - 
+
+## Contribuição:
+Se deseja contribuir para o projeto, sinta-se à vontade para abrir problemas ou enviar solicitações de pull requests.
 
 ## Referências
 Caso fique interessado em entender mais sobre a classe de pushbuttons acesse o link https://github.com/marcosgabrielsr/ClassePushButton.
@@ -59,9 +71,8 @@ Caso fique com dúvidas sobre qual jogo foi utilizado como base para este projet
 
 O material de apoio para utilização da biblioteca podem ser encontrados no seguinte link https://learn.adafruit.com/adafruit-gfx-graphics-library/rotating-the-display.
 
-## Imagens
-
+## Demonstração
 <div align="center">
-  <img src="https://cdn.discordapp.com/attachments/1153711382336909332/1163666420677234819/IMG-20230909-WA0074.jpg?ex=654067ce&is=652df2ce&hm=534c77987993fd8685b42c0ba37b979d68e9cdb51efe439247b89c3f099c4f49&">
-  <p><i>imagem meramente ilustrativa sobre como o jogo funciona(esboço inicial).</i></p>
+  <img src="https://cdn.discordapp.com/attachments/1153711382336909332/1215818224487370885/20240308_202548.jpg?ex=65fe21f5&is=65ebacf5&hm=d73c848568b15c3690bcae5b0d9b3bbcae9f2573ed149926c85cc349f46fe4e1&">
+  <p><i>Imagem do projeto em execução.</i></p>
 </div>
