@@ -204,12 +204,12 @@ void drawFallingItem(Adafruit_PCD8544 &display, fallingItem* &itens, float &inte
 
 //Função que verifica se passou um intervalo de tempo para chamar addItem
 void newItem(uint16_t &time, unsigned long &i, fallingItem* &items) {
-    //Verifica se desde o último instante de geração de uma nova bomba, passou um intervalo
+    //Verifica se desde o último instante de geração de um novo item, passou um intervalo
     //de timeToAdd ms
     if((millis() - i) >= time){
         addItem(items);                 //Adiciona um item à fila itens
 
         i = millis();                   //Atualizamos o último instante de atualização
-        time -= 8;                      //Diminui o tempo entre as gerações em 5 ms
+        time -= 8;                      //Diminui o tempo entre as gerações em 8 ms
     }
 }

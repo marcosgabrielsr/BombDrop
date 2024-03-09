@@ -104,12 +104,10 @@ void loop(){
     record = player.points;
     player.points = 0;
     player.life = 3;
-    time = 100;
     interval = INIT_INTERVAL;
     time = INIT_TIME;
 
     while(itens != NULL) removeItem(itens);         //Código que esvazia toda a fila
-
   }
 
   display.setRotation(1);
