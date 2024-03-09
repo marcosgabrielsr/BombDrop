@@ -40,7 +40,7 @@ Este projeto consiste em um jogo desenvolvido para plataforma arduino e similare
 - Para diminuir a quantidade de parâmetros passados por função e também melhorar a leitura do códigos foram criadas as seguintes structs: `pad` e `fallingItem`.
 
 - ### Struct Pad:
-- - **Descrição**: Struct utilizada para representar a plataforma controlada pelo jogador, armazenando suas coordenadas x, pontos ganhos, pontos de vida e botões de ação (L e R). 
+  - **Descrição**: Struct utilizada para representar a plataforma controlada pelo jogador, armazenando suas coordenadas x, pontos ganhos, pontos de vida e botões de ação (L e R). 
 
 ## Funcionalidades
 - 
