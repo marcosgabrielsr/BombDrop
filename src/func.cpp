@@ -110,9 +110,7 @@ void addItem(fallingItem* &itens) {
     fallingItem *p = itens, *newItem = NULL;
     newItem = (fallingItem*) calloc (1, sizeof(fallingItem));
 
-    if (newItem == NULL) {                            //Erro na alocação de memória
-        return;
-    }
+    if (newItem == NULL) return;                            //Erro na alocação de memória
 
     //Código onde se tem 60% de ser bomba e 40% de ser ancora
     (random(1, 11) <= 6) ? newItem->isBomb = true : newItem->isBomb = false;
