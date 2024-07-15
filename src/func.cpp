@@ -108,7 +108,6 @@ void drawPad(Adafruit_PCD8544 &display, pad &player) {
 void addItem(fallingItem* &itens) {
     //Ponteiros para percorrer a fila e para adicionar novo item
     fallingItem *p = itens, *newItem = NULL;
-
     newItem = (fallingItem*) calloc (1, sizeof(fallingItem));
 
     if (newItem == NULL) {                            //Erro na alocação de memória
@@ -187,7 +186,7 @@ void drawFallingItem(Adafruit_PCD8544 &display, fallingItem* &itens, float &inte
         aux = 1;                        //atualizamos o aux para 1 (atualiza a posição dos items)
     }
 
-    //Percorre e desenha todos os itens da lista e os desenha
+    //Percorre e desenha todos os itens da lista
     while(p != NULL) {
         //Caso o item seja uma bomba...
         if(p->isBomb)
